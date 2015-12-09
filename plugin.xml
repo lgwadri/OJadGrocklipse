@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+
+     <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            name="JadClipse Class File Viewer"
+            default="true"
+            icon="icons/classf_obj.gif"
+            extensions="class"
+            contributorClass="net.sf.jadclipse.JadclipseActionBarContributor"
+            class="net.sf.jadclipse.JadclipseClassFileEditor"
+            id="net.sf.jadclipse.JadclipseClassFileEditor">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editorActions">
+      <editorContribution
+            targetID="net.sf.jadclipse.JadclipseClassFileEditor"
+            id="net.sf.jadclipse.JadclipseClassFileEditor.BreakpointRulerActions">
+         <action
+               label="%AddBreakpoint.label"
+               class="org.eclipse.debug.ui.actions.RulerToggleBreakpointActionDelegate"
+               actionID="RulerDoubleClick"
+               id="org.eclipse.jdt.debug.ui.actions.ManageBreakpointRulerAction">
+         </action>
+      </editorContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            name="JadClipse"
+            category="org.eclipse.jdt.ui.preferences.JavaBasePreferencePage"
+            class="net.sf.jadclipse.ui.JadClipsePreferencePage"
+            id="net.sf.jadclipse.ui.preferences.Main">
+      </page>
+      <page
+            name="Formatting"
+            category="org.eclipse.jdt.ui.preferences.JavaBasePreferencePage/net.sf.jadclipse.ui.preferences.Main"
+            class="net.sf.jadclipse.ui.JadClipsePreferencePageFormat"
+            id="net.sf.jadclipse.ui.preferences.Formatting">
+      </page>
+      <page
+            name="Directives"
+            category="org.eclipse.jdt.ui.preferences.JavaBasePreferencePage/net.sf.jadclipse.ui.preferences.Main"
+            class="net.sf.jadclipse.ui.JadClipsePreferencePageDirect"
+            id="net.sf.jadclipse.ui.preferences.Directives">
+      </page>
+      <page
+            name="Debug"
+            category="org.eclipse.jdt.ui.preferences.JavaBasePreferencePage/net.sf.jadclipse.ui.preferences.Main"
+            class="net.sf.jadclipse.ui.JadClipsePreferencePageDebug"
+            id="net.sf.jadclipse.ui.preferences.Debug">
+      </page>
+      <page
+            name="Misc"
+            category="org.eclipse.jdt.ui.preferences.JavaBasePreferencePage/net.sf.jadclipse.ui.preferences.Main"
+            class="net.sf.jadclipse.ui.JadClipsePreferencePageMisc"
+            id="net.sf.jadclipse.ui.preferences.Misc">
+      </page>
+   </extension>
+
+</plugin>

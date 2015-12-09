@@ -1,0 +1,31 @@
+--------------------------------------------------------------------------------
+Version 3.2.4
+--------------------------------------------------------------------------------
+- Bug fixes: 
+  - Prevent stack overflow in JadclipseSourceMapper.findSource()
+- Set required Java environment to J2SE-1.4
+
+--------------------------------------------------------------------------------
+Version 3.2.3
+--------------------------------------------------------------------------------
+- Bug fixes
+- New plugin structure: Fully qualified package names "net.sf.jadclipse" instead
+of just "jadclipse".
+- New feature plug-in available as net.sf.jadclipse-feature.
+
+--------------------------------------------------------------------------------
+Version 3.2.2
+--------------------------------------------------------------------------------
+
+- Possibility to reformat the decompiled code using the Eclipse code formatter.
+Check out the new option in Preferences > Java > JadClipse > Use Eclipse
+code formatter. This new option may interfere with formatting instructions of
+Jad and is therefore experimental and disabled by default.
+
+- Preferences > Java > JadClipse > Debug: Decompiled code is only aligned if the
+the output of line numbers is turned on.
+
+- Improved integration of Outline View. Folding and other features are now supported
+as well as double clicks for toggling breakpoints. Breakpoints work best when the 
+option JadClipse > Use Eclipse code formatter is disabled and the two options 
+under JadClipse > Debug are enabled.
