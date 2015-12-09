@@ -9,6 +9,10 @@ import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.jface.preference.ListEditor;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
@@ -45,14 +49,23 @@ public class JadClipsePreferencePage extends FieldEditorPreferencePage implement
 		StringFieldEditor tempd = new StringFieldEditor(JadclipsePlugin.TEMP_DIR, "Directory for temporary files:", getFieldEditorParent());
 		tempd.setEmptyStringAllowed(false);
 		addField(tempd);
+				
+			
+		
+		ComboFieldEditor ptcsrcUrl = new ComboFieldEditor(JadclipsePlugin.PTC_URL, "PTC sources ", Utils.getGrockWebSites(), getFieldEditorParent());
+		ptcsrcUrl.setPropertyChangeListener(new IPropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent event) {
+				System.out.print(event.getNewValue());
+			}
 
-		StringFieldEditor ptcsrcUrl = new StringFieldEditor(JadclipsePlugin.PTC_URL, "PTC sources ", getFieldEditorParent());
-		ptcsrcUrl.setEmptyStringAllowed(false);
+		});
 		addField(ptcsrcUrl);
 
-		ComboFieldEditor ptcsrcUrlList = new ComboFieldEditor(JadclipsePlugin.PTC_URL, "PTC sources ", Utils.getGrockProjects(), getFieldEditorParent());
+		ComboFieldEditor ptcsrcUrlList = new ComboFieldEditor(JadclipsePlugin.GROCK_PROJECT, "Grock Projects", Utils.getGrockProjects(), getFieldEditorParent());
 		addField(ptcsrcUrlList);
 		
+	
 		BooleanFieldEditor ignoreptcsrc = new BooleanFieldEditor(JadclipsePlugin.IGNORE_PTCSRC, "Ignore PTC web sources if existing", getFieldEditorParent());
 		addField(ignoreptcsrc);
 		BooleanFieldEditor reusebuf = new BooleanFieldEditor(JadclipsePlugin.REUSE_BUFFER, "Reuse code buffer", getFieldEditorParent());
