@@ -45,8 +45,6 @@ public class PTCDecompiler implements IDecompiler {
 	 * java.lang.String, java.lang.String)
 	 */
 	public void decompile(String root, String packege, String className) {
-<<<<<<< HEAD
-=======
 
 		IPreferenceStore prefs = JadclipsePlugin.getDefault().getPreferenceStore();
 		String srcUrl = prefs.getString(JadclipsePlugin.PTC_URL);
@@ -58,16 +56,14 @@ public class PTCDecompiler implements IDecompiler {
 			// Construct data
 			String data = URLEncoder.encode(packege + "." + className, "UTF-8");
 			String path = data.replaceAll("\\.", "/") + ".java";
-		
+
 			if (Utils.isWhereUsedSite(srcUrl)) {
 				// Send data
-				//http://ah-wused.ptcnet.ptc.com/wus_x-24_M032/viewSource.jsp?class=@class@
-				
 				srcUrl = srcUrl + "/" + gproject + "/viewSource.jsp?class=" + packege + "." + className;
 				data += "&" + URLEncoder.encode("ln", "UTF-8") + "=" + URLEncoder.encode("false", "UTF-8");
-				
+
 				System.out.println("Open: " + srcUrl);
-				
+
 				URL url = new URL(srcUrl);
 				URLConnection conn = url.openConnection();
 				conn.setDoOutput(true);
@@ -90,7 +86,6 @@ public class PTCDecompiler implements IDecompiler {
 						go = true;
 					if (line.startsWith("</pre>"))
 						go = false;
-
 				}
 
 				wr.close();
@@ -102,15 +97,12 @@ public class PTCDecompiler implements IDecompiler {
 				/*
 				 * get the file path source
 				 */
-
 				Document doc = Jsoup.connect(search_pattern).get();
 				Elements results = doc.getElementById("results").getAllElements();
 				for (Element el : results) {
 					if (el.tagName().equals("a") && el.parent().className().equals("f")) {
 						String class_url = srcUrl + el.attr("href").replaceAll("xref", "opengrok_src");
-						
 						System.out.println("Open: " + class_url);
-
 						URL url = new URL(class_url);
 						URLConnection conn = url.openConnection();
 						conn.setDoOutput(true);
@@ -119,171 +111,6 @@ public class PTCDecompiler implements IDecompiler {
 							while ((line = rd.readLine()) != null) {
 								source += line + "\n";
 							}
-						} finally {
-							rd.close();
-						}
-						/*
-						 * Stop at first
-						 */
-						break;
-
-					}
-				}
-
-			}
-
-		} catch (Exception e) {
-
-			e.printStackTrace();
-
-		} finally {
-			time = System.currentTimeMillis() - start;
-		}
->>>>>>> branch 'master' of https://github.com/lgwadri/OJadGrocklipse
-
-		IPreferenceStore prefs = JadclipsePlugin.getDefault().getPreferenceStore();
-		String srcUrl = prefs.getString(JadclipsePlugin.PTC_URL);
-		String gproject = prefs.getString(JadclipsePlugin.GROCK_PROJECT);
-
-		try {
-			start = System.currentTimeMillis();
-
-			// Construct data
-			String data = URLEncoder.encode(packege + "." + className, "UTF-8");
-			String path = data.replaceAll("\\.", "/") + ".java";
-<<<<<<< HEAD
-
-			if (Utils.isWhereUsedSite(srcUrl)) {
-				// Send data
-				srcUrl = srcUrl + "/" + gproject + "/viewSource.jsp?class=" + packege + "." + className;
-				data += "&" + URLEncoder.encode("ln", "UTF-8") + "=" + URLEncoder.encode("false", "UTF-8");
-
-				System.out.println("Open: " + srcUrl);
-
-=======
-		
-			if (Utils.isWhereUsedSite(srcUrl)) {
-				// Send data
-				//http://ah-wused.ptcnet.ptc.com/wus_x-24_M032/viewSource.jsp?class=@class@
-				
-				srcUrl = srcUrl + "/" + gproject + "/viewSource.jsp?class=" + packege + "." + className;
-				data += "&" + URLEncoder.encode("ln", "UTF-8") + "=" + URLEncoder.encode("false", "UTF-8");
-				
-				System.out.println("Open: " + srcUrl);
-				
->>>>>>> cf383d1bf1b0dfa88d9e8cc21a2e350ed4a8cdd0
-				URL url = new URL(srcUrl);
-				URLConnection conn = url.openConnection();
-				conn.setDoOutput(true);
-
-				OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-				wr.write(data);
-				wr.flush();
-<<<<<<< HEAD
-=======
-
-				// Get the response
-				BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-				String line;
-				boolean go = false;
-
-				while ((line = rd.readLine()) != null) {
-
-					if (go)
-						source += replaceAll(line) + "\n";
-
-					if (line.startsWith("<pre>"))
-						go = true;
-					if (line.startsWith("</pre>"))
-						go = false;
-
-				}
-
-				wr.close();
-				rd.close();
-			} else {
-				String line;
-				String search_pattern = srcUrl + "search?q=&project=" + gproject + "&defs=&refs=&path=" + path + "&hist=";
-
-				/*
-				 * get the file path source
-				 */
-
-				Document doc = Jsoup.connect(search_pattern).get();
-				Elements results = doc.getElementById("results").getAllElements();
-				for (Element el : results) {
-					if (el.tagName().equals("a") && el.parent().className().equals("f")) {
-						String class_url = srcUrl + el.attr("href").replaceAll("xref", "opengrok_src");
-						
-						System.out.println("Open: " + class_url);
-
-						URL url = new URL(class_url);
-						URLConnection conn = url.openConnection();
-						conn.setDoOutput(true);
-						BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-						try {
-							while ((line = rd.readLine()) != null) {
-								source += line + "\n";
-							}
-						} finally {
-							rd.close();
-						}
-						/*
-						 * Stop at first
-						 */
-						break;
-
-					}
-				}
-
-			}
-
-		} catch (Exception e) {
-
-			e.printStackTrace();
-
-		} finally {
-			time = System.currentTimeMillis() - start;
-		}
->>>>>>> cf383d1bf1b0dfa88d9e8cc21a2e350ed4a8cdd0
-
-				// Get the response
-				BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-				String line;
-				boolean go = false;
-
-				while ((line = rd.readLine()) != null) {
-
-					if (go)
-						source += replaceAll(line) + "\n";
-
-					if (line.startsWith("<pre>"))
-						go = true;
-					if (line.startsWith("</pre>"))
-						go = false;
-				}
-
-				wr.close();
-				rd.close();
-			} else {
-				String line;
-				String search_pattern = srcUrl + "search?q=&project=" + gproject + "&defs=&refs=&path=" + path + "&hist=";
-				/*
-				 * get the file path source
-				 */
-				Document doc = Jsoup.connect(search_pattern).get();
-				Elements results = doc.getElementById("results").getAllElements();
-				for (Element el : results) {
-					if (el.tagName().equals("a") && el.parent().className().equals("f")) {
-						String class_url = srcUrl + el.attr("href").replaceAll("xref", "opengrok_src");
-						System.out.println("Open: " + class_url);
-						URL url = new URL(class_url);
-						URLConnection conn = url.openConnection();
-						conn.setDoOutput(true);
-						BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-						try {
-							while ((line = rd.readLine()) != null) 
-								source += line + "\n";
 						} finally {
 							rd.close();
 						}
