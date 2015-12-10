@@ -32,13 +32,14 @@ public class Utils {
 		try {
 			IPreferenceStore prefs = JadclipsePlugin.getDefault().getPreferenceStore(); 
 			String srcUrl = prefs.getString(JadclipsePlugin.PTC_URL);
-			Document doc = Jsoup.connect(prefs.getString(JadclipsePlugin.PTC_URL) + "/wus_x-20/wusSelectApp.jsp").get();
 			if (isWhereUsedSite(srcUrl)) {
+				Document doc = Jsoup.connect(prefs.getString(JadclipsePlugin.PTC_URL) + "/wus_x-20/wusSelectApp.jsp").get();
 				Elements projects = doc.getElementsByTag("li");
 				for (Element project : projects) {
 					list.put(project.children().text(), project.children().attr("href").split("/")[1]);
 				}
 			} else {
+				Document doc = Jsoup.connect(prefs.getString(JadclipsePlugin.PTC_URL)).get();
 				Elements projects = doc.getElementById("project").getAllElements();
 				for (Element project : projects) {
 					if (project.tagName().equals("option"))

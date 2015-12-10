@@ -56,16 +56,14 @@ public class PTCDecompiler implements IDecompiler {
 			// Construct data
 			String data = URLEncoder.encode(packege + "." + className, "UTF-8");
 			String path = data.replaceAll("\\.", "/") + ".java";
-		
+
 			if (Utils.isWhereUsedSite(srcUrl)) {
 				// Send data
-				//http://ah-wused.ptcnet.ptc.com/wus_x-24_M032/viewSource.jsp?class=@class@
-				
 				srcUrl = srcUrl + "/" + gproject + "/viewSource.jsp?class=" + packege + "." + className;
 				data += "&" + URLEncoder.encode("ln", "UTF-8") + "=" + URLEncoder.encode("false", "UTF-8");
-				
+
 				System.out.println("Open: " + srcUrl);
-				
+
 				URL url = new URL(srcUrl);
 				URLConnection conn = url.openConnection();
 				conn.setDoOutput(true);
@@ -88,7 +86,6 @@ public class PTCDecompiler implements IDecompiler {
 						go = true;
 					if (line.startsWith("</pre>"))
 						go = false;
-
 				}
 
 				wr.close();
@@ -96,27 +93,22 @@ public class PTCDecompiler implements IDecompiler {
 			} else {
 				String line;
 				String search_pattern = srcUrl + "search?q=&project=" + gproject + "&defs=&refs=&path=" + path + "&hist=";
-
 				/*
 				 * get the file path source
 				 */
-
 				Document doc = Jsoup.connect(search_pattern).get();
 				Elements results = doc.getElementById("results").getAllElements();
 				for (Element el : results) {
 					if (el.tagName().equals("a") && el.parent().className().equals("f")) {
 						String class_url = srcUrl + el.attr("href").replaceAll("xref", "opengrok_src");
-						
 						System.out.println("Open: " + class_url);
-
 						URL url = new URL(class_url);
 						URLConnection conn = url.openConnection();
 						conn.setDoOutput(true);
 						BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 						try {
-							while ((line = rd.readLine()) != null) {
+							while ((line = rd.readLine()) != null) 
 								source += line + "\n";
-							}
 						} finally {
 							rd.close();
 						}
@@ -124,20 +116,15 @@ public class PTCDecompiler implements IDecompiler {
 						 * Stop at first
 						 */
 						break;
-
 					}
 				}
-
 			}
 
 		} catch (Exception e) {
-
 			e.printStackTrace();
-
 		} finally {
 			time = System.currentTimeMillis() - start;
 		}
-
 	}
 
 	public String replaceAll(String line) {
