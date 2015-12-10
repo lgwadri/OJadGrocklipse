@@ -54,7 +54,6 @@ public class JadClipsePreferencePage extends FieldEditorPreferencePage implement
 		
 		ComboFieldEditor ptcsrcUrl = new ComboFieldEditor(JadclipsePlugin.PTC_URL, "PTC sources ", Utils.getGrockWebSites(), getFieldEditorParent());
 		ptcsrcUrl.setPropertyChangeListener(new IPropertyChangeListener() {
-			@Override
 			public void propertyChange(PropertyChangeEvent event) {
 				System.out.print(event.getNewValue());
 			}
