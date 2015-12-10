@@ -15,7 +15,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class Utils {
-	
+
 	public static String[][] getGrockWebSites() {
 		Map<String, String> list = new HashMap<String, String>();
 		list.put("http://ah-opengrok.ptcnet.ptc.com/", "http://ah-opengrok.ptcnet.ptc.com/");
@@ -27,18 +27,19 @@ public class Utils {
 
 	public static String[][] getGrockProjects() {
 		// TODO Auto-generated method stub
-		
+
 		Map<String, String> list = new TreeMap<String, String>();
 		try {
-			IPreferenceStore prefs = JadclipsePlugin.getDefault().getPreferenceStore(); 
+			IPreferenceStore prefs = JadclipsePlugin.getDefault().getPreferenceStore();
 			String srcUrl = prefs.getString(JadclipsePlugin.PTC_URL);
-			Document doc = Jsoup.connect(prefs.getString(JadclipsePlugin.PTC_URL) + "/wus_x-20/wusSelectApp.jsp").get();
 			if (isWhereUsedSite(srcUrl)) {
+				Document doc = Jsoup.connect(prefs.getString(JadclipsePlugin.PTC_URL) + "/wus_x-20/wusSelectApp.jsp").get();
 				Elements projects = doc.getElementsByTag("li");
 				for (Element project : projects) {
 					list.put(project.children().text(), project.children().attr("href").split("/")[1]);
 				}
 			} else {
+				Document doc = Jsoup.connect(prefs.getString(JadclipsePlugin.PTC_URL)).get();
 				Elements projects = doc.getElementById("project").getAllElements();
 				for (Element project : projects) {
 					if (project.tagName().equals("option"))
@@ -53,25 +54,26 @@ public class Utils {
 
 		return getArrayFromHash(list);
 	}
-	
-	public static boolean isWhereUsedSite(String srcUrl){
+
+	public static boolean isWhereUsedSite(String srcUrl) {
 		if (srcUrl.indexOf("ah-wused") == -1)
 			return false;
 		else
 			return true;
 	}
-	public static String[][] getArrayFromHash(Map<String,String> data){
-        String[][] str = null;
-        {
-            Object[] keys = data.keySet().toArray();
-            Object[] values = data.values().toArray();
-            str = new String[keys.length][2];
-            for(int i=0;i<keys.length;i++) {
-                str[i][0] = (String)keys[i];
-                str[i][1] = (String)values[i];
-            }
-        }
-        return str;
-    }
+
+	public static String[][] getArrayFromHash(Map<String, String> data) {
+		String[][] str = null;
+		{
+			Object[] keys = data.keySet().toArray();
+			Object[] values = data.values().toArray();
+			str = new String[keys.length][2];
+			for (int i = 0; i < keys.length; i++) {
+				str[i][0] = (String) keys[i];
+				str[i][1] = (String) values[i];
+			}
+		}
+		return str;
+	}
 
 }
