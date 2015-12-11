@@ -198,9 +198,6 @@ public class PTCDecompiler implements IDecompiler {
 			if (el.tagName().equals("a") && el.parent().className().equals("f")) {
 				System.out.println(el.attr("href"));
 
-				// http://ah-opengrok.ptcnet.ptc.com/xref/x-26/infoengine/InfoEngine/src/com/infoengine/object/factory/Element.java
-				// http://ah-opengrok.ptcnet.ptc.com/opengrok_src/x-26/infoengine/InfoEngine/src/com/infoengine/object/factory/Element.java
-
 				String class_url = grock_url + el.attr("href").replaceAll("xref", "opengrok_src");
 
 				URL url = new URL(class_url);

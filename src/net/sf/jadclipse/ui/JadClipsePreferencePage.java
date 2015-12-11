@@ -12,7 +12,10 @@ import org.eclipse.jface.preference.ListEditor;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
@@ -23,6 +26,8 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
  * @author V.Grishchenko
  */
 public class JadClipsePreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+
+	protected StringChoiceFieldEditor choice;
 
 	public JadClipsePreferencePage() {
 		super(FieldEditorPreferencePage.GRID);
@@ -52,19 +57,32 @@ public class JadClipsePreferencePage extends FieldEditorPreferencePage implement
 				
 			
 		
-		ComboFieldEditor ptcsrcUrl = new ComboFieldEditor(JadclipsePlugin.PTC_URL, "PTC sources ", Utils.getGrockWebSites(), getFieldEditorParent());
-		ptcsrcUrl.setPropertyChangeListener(new IPropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent event) {
-				System.out.print(event.getNewValue());
-			}
-
-		});
+		StringChoiceFieldEditor ptcsrcUrl = new StringChoiceFieldEditor(JadclipsePlugin.PTC_URL, "Grock Url ", getFieldEditorParent());
+		ptcsrcUrl.addItem("http://ah-opengrok.ptcnet.ptc.com/", "http://ah-opengrok.ptcnet.ptc.com/");
+		ptcsrcUrl.addItem("http://bla-grok-01/", "http://bla-grok-01/");
+		ptcsrcUrl.addItem("http://ah-wused.ptcnet.ptc.com", "http://ah-wused.ptcnet.ptc.com");
 		addField(ptcsrcUrl);
+		ptcsrcUrl.addSelectionListener(new SelectionAdapter()
+        {
+            public void widgetSelected(SelectionEvent e)
+            {
+            	choice.removeItems();
+            	String[][] fKeys = Utils.getGrockProjects();
+            	for (int i = 0; i < fKeys.length; i++)
+            		choice.addItem(fKeys[i][0], fKeys[i][1]);
+            }
+
+        });
 
 		ComboFieldEditor ptcsrcUrlList = new ComboFieldEditor(JadclipsePlugin.GROCK_PROJECT, "Grock Projects", Utils.getGrockProjects(), getFieldEditorParent());
 		addField(ptcsrcUrlList);
 		
-	
+		choice = new StringChoiceFieldEditor(JadclipsePlugin.CMD, "Path to decompiler:", getFieldEditorParent());
+		choice.addItem("kjkjkljkljklj", "bxbxcbxcb");		
+		choice.addItem("h", "bxbxcbxcb");
+		addField(choice);
+		
+		
 		BooleanFieldEditor ignoreptcsrc = new BooleanFieldEditor(JadclipsePlugin.IGNORE_PTCSRC, "Ignore PTC web sources if existing", getFieldEditorParent());
 		addField(ignoreptcsrc);
 		BooleanFieldEditor reusebuf = new BooleanFieldEditor(JadclipsePlugin.REUSE_BUFFER, "Reuse code buffer", getFieldEditorParent());

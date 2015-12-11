@@ -27,10 +27,10 @@ public class Utils {
 
 	public static String[][] getGrockProjects() {
 		// TODO Auto-generated method stub
-
+		IPreferenceStore prefs = JadclipsePlugin.getDefault().getPreferenceStore();
 		Map<String, String> list = new TreeMap<String, String>();
 		try {
-			IPreferenceStore prefs = JadclipsePlugin.getDefault().getPreferenceStore();
+			
 			String srcUrl = prefs.getString(JadclipsePlugin.PTC_URL);
 			if (isWhereUsedSite(srcUrl)) {
 				Document doc = Jsoup.connect(prefs.getString(JadclipsePlugin.PTC_URL) + "/wus_x-20/wusSelectApp.jsp").get();
@@ -49,6 +49,7 @@ public class Utils {
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			list.put(prefs.getString(JadclipsePlugin.GROCK_PROJECT) + " (Disconnected)", prefs.getString(JadclipsePlugin.GROCK_PROJECT));
 			e.printStackTrace();
 		}
 

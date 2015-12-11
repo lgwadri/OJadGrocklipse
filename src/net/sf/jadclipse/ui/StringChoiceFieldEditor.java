@@ -12,6 +12,7 @@ import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -133,6 +134,17 @@ public class StringChoiceFieldEditor extends FieldEditor
             fLabels.remove(index);
             fCombo.remove(label);
         }
+    }
+    
+    public void removeItems()
+    {
+    	for (int i = 0; i < fKeys.size(); i++)
+    		fKeys.remove(i);
+    }
+    
+    public void addSelectionListener(SelectionListener listener)
+    {
+    	 fCombo.addSelectionListener(listener);
     }
     /**
      * Set the focus to this field editor.
