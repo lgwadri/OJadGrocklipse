@@ -7,7 +7,7 @@
             name="JadClipse Class File Viewer"
             default="true"
             icon="icons/classf_obj.gif"
-            extensions="class"
+            extensions="class, class without source"
             contributorClass="net.sf.jadclipse.JadclipseActionBarContributor"
             class="net.sf.jadclipse.JadclipseClassFileEditor"
             id="net.sf.jadclipse.JadclipseClassFileEditor">
@@ -35,6 +35,12 @@
             id="net.sf.jadclipse.ui.preferences.Main">
       </page>
       <page
+            category="org.eclipse.jdt.ui.preferences.JavaBasePreferencePage/net.sf.jadclipse.ui.preferences.Main"
+            class="net.sf.jadclipse.ui.JadClipsePreferencePageDebug"
+            id="net.sf.jadclipse.ui.preferences.Debug"
+            name="Debug">
+      </page>
+      <page
             name="Formatting"
             category="org.eclipse.jdt.ui.preferences.JavaBasePreferencePage/net.sf.jadclipse.ui.preferences.Main"
             class="net.sf.jadclipse.ui.JadClipsePreferencePageFormat"
@@ -45,12 +51,6 @@
             category="org.eclipse.jdt.ui.preferences.JavaBasePreferencePage/net.sf.jadclipse.ui.preferences.Main"
             class="net.sf.jadclipse.ui.JadClipsePreferencePageDirect"
             id="net.sf.jadclipse.ui.preferences.Directives">
-      </page>
-      <page
-            name="Debug"
-            category="org.eclipse.jdt.ui.preferences.JavaBasePreferencePage/net.sf.jadclipse.ui.preferences.Main"
-            class="net.sf.jadclipse.ui.JadClipsePreferencePageDebug"
-            id="net.sf.jadclipse.ui.preferences.Debug">
       </page>
       <page
             name="Misc"
