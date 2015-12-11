@@ -36,7 +36,7 @@ public class StringChoiceFieldEditor extends FieldEditor
     {
         fKeys.add(key);
         fLabels.add(label);
-        fCombo.add(label);
+        fCombo.add(key);
     }
     
     protected void adjustForNumColumns(int numColumns)

@@ -70,18 +70,16 @@ public class JadClipsePreferencePage extends FieldEditorPreferencePage implement
             	Combo obj = ((Combo)e.getSource());
             	String[][] fKeys = Utils.getGrockProjects(obj.getItem(obj.getSelectionIndex()));
             	for (int i = 0; i < fKeys.length; i++)
-            		choice.addItem(fKeys[i][0], fKeys[i][1]);
+            		choice.addItem(fKeys[i][1], fKeys[i][0]);
             }
 
         });
 		
 		
 		String[][] projects = Utils.getGrockProjects(null);
-		//ComboFieldEditor ptcsrcUrlList = new ComboFieldEditor(JadclipsePlugin.GROCK_PROJECT, "Grock Projects", projects, getFieldEditorParent());
-		//addField(ptcsrcUrlList);		
 		choice = new StringChoiceFieldEditor(JadclipsePlugin.GROCK_PROJECT, "Grock Projects", getFieldEditorParent());
     	for (int i = 0; i < projects.length; i++)
-    		choice.addItem(projects[i][0], projects[i][1]);
+    		choice.addItem(projects[i][1], projects[i][0]);
 		addField(choice);
 		
 		
