@@ -101,7 +101,7 @@ public class PTCDecompiler implements IDecompiler {
 				Elements results = doc.getElementById("results").getAllElements();
 				for (Element el : results) {
 					if (el.tagName().equals("a") && el.parent().className().equals("f")) {
-						String class_url = srcUrl + el.attr("href").replaceAll("xref", "opengrok_src");
+						String class_url = srcUrl + el.attr("href").replaceAll("xref", "raw");
 						System.out.println("Open: " + class_url);
 						URL url = new URL(class_url);
 						URLConnection conn = url.openConnection();

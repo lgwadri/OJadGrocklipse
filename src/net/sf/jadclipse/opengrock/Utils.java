@@ -25,21 +25,21 @@ public class Utils {
 		return getArrayFromHash(list);
 	}
 
-	public static String[][] getGrockProjects() {
+	public static String[][] getGrockProjects(String baseUrl) {
 		// TODO Auto-generated method stub
 		IPreferenceStore prefs = JadclipsePlugin.getDefault().getPreferenceStore();
 		Map<String, String> list = new TreeMap<String, String>();
 		try {
 			
-			String srcUrl = prefs.getString(JadclipsePlugin.PTC_URL);
+			String srcUrl = baseUrl != null ? baseUrl : prefs.getString(JadclipsePlugin.PTC_URL);
 			if (isWhereUsedSite(srcUrl)) {
-				Document doc = Jsoup.connect(prefs.getString(JadclipsePlugin.PTC_URL) + "/wus_x-20/wusSelectApp.jsp").get();
+				Document doc = Jsoup.connect(srcUrl + "/wus_x-20/wusSelectApp.jsp").get();
 				Elements projects = doc.getElementsByTag("li");
 				for (Element project : projects) {
 					list.put(project.children().text(), project.children().attr("href").split("/")[1]);
 				}
 			} else {
-				Document doc = Jsoup.connect(prefs.getString(JadclipsePlugin.PTC_URL)).get();
+				Document doc = Jsoup.connect(srcUrl).get();
 				Elements projects = doc.getElementById("project").getAllElements();
 				for (Element project : projects) {
 					if (project.tagName().equals("option"))

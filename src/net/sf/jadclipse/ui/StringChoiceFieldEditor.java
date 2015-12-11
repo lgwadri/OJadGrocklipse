@@ -138,8 +138,11 @@ public class StringChoiceFieldEditor extends FieldEditor
     
     public void removeItems()
     {
-    	for (int i = 0; i < fKeys.size(); i++)
-    		fKeys.remove(i);
+       	
+    	fKeys.clear();
+        fLabels.clear();
+        fCombo.removeAll();
+    	fCombo.redraw();
     }
     
     public void addSelectionListener(SelectionListener listener)
