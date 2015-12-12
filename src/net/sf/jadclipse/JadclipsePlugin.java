@@ -27,6 +27,10 @@ public class JadclipsePlugin extends AbstractUIPlugin implements IPropertyChange
 	public static final String TEMP_DIR = "net.sf.jadclipse.tempd";
 	public static final String IGNORE_PTCSRC = "net.sf.jadclipse.ptc.ignoresrc"; //since 2.04
 	public static final String PTC_URL = "net.sf.jadclipse.ptc.ptcsrcUrl";
+	
+	public static final String GROCK_URLS = "jadclipse.ptc.grockURLs";
+	public static final String WUSED_URLS = "jadclipse.ptc.whereuserdURLs";
+	
 	public static final String GROCK_PROJECT = "net.sf.jadclipse.ptc.grockproject";
 	public static final String PTC_VERSION = "net.sf.jadclipse.ptc.ptcSrcVersion";
 	public static final String CMD = "net.sf.jadclipse.cmd";
@@ -122,6 +126,7 @@ public class JadclipsePlugin extends AbstractUIPlugin implements IPropertyChange
 			try
 			{
 				command = resourceBundle.getString(CMD);
+				
 			}
 			catch (MissingResourceException e)
 			{

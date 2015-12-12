@@ -7,7 +7,7 @@
             name="JadClipse Class File Viewer"
             default="true"
             icon="icons/classf_obj.gif"
-            extensions="class, class without source"
+            extensions="class without source, class"
             contributorClass="net.sf.jadclipse.JadclipseActionBarContributor"
             class="net.sf.jadclipse.JadclipseClassFileEditor"
             id="net.sf.jadclipse.JadclipseClassFileEditor">

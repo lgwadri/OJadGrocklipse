@@ -8,7 +8,9 @@ import java.util.TreeMap;
 
 import net.sf.jadclipse.JadclipsePlugin;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -16,30 +18,20 @@ import org.jsoup.select.Elements;
 
 public class Utils {
 
-	public static String[][] getGrockWebSites() {
-		Map<String, String> list = new HashMap<String, String>();
-		list.put("http://ah-opengrok.ptcnet.ptc.com/", "http://ah-opengrok.ptcnet.ptc.com/");
-		list.put("http://bla-grok-01/", "http://bla-grok-01/");
-		list.put("http://ah-wused.ptcnet.ptc.com", "http://ah-wused.ptcnet.ptc.com");
-		list.put("http://localhost:8090/source/", "http://localhost:8090/source/");
-		return getArrayFromHash(list);
-	}
-
 	public static String[][] getGrockProjects(String baseUrl) {
-		// TODO Auto-generated method stub
 		IPreferenceStore prefs = JadclipsePlugin.getDefault().getPreferenceStore();
 		Map<String, String> list = new TreeMap<String, String>();
 		try {
 			
 			String srcUrl = baseUrl != null ? baseUrl : prefs.getString(JadclipsePlugin.PTC_URL);
 			if (isWhereUsedSite(srcUrl)) {
-				Document doc = Jsoup.connect(srcUrl + "/wus_x-20/wusSelectApp.jsp").get();
+				Document doc = jsconnect(srcUrl + "/wus_x-20/wusSelectApp.jsp").get();
 				Elements projects = doc.getElementsByTag("li");
 				for (Element project : projects) {
-					list.put(project.children().text(), project.children().attr("href").split("/")[1]);
+					list.put(project.children().attr("href").split("/")[1], project.children().text());
 				}
 			} else {
-				Document doc = Jsoup.connect(srcUrl).get();
+				Document doc = jsconnect(srcUrl).get();
 				Elements projects = doc.getElementById("project").getAllElements();
 				for (Element project : projects) {
 					if (project.tagName().equals("option"))
@@ -48,16 +40,23 @@ public class Utils {
 			}
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			list.put(prefs.getString(JadclipsePlugin.GROCK_PROJECT) + " (Disconnected)", prefs.getString(JadclipsePlugin.GROCK_PROJECT));
-			e.printStackTrace();
+			list.put(prefs.getString(JadclipsePlugin.GROCK_PROJECT), prefs.getString(JadclipsePlugin.GROCK_PROJECT) + " (Disconnected)");
+			JadclipsePlugin.logError(e, e.getLocalizedMessage());
 		}
 
 		return getArrayFromHash(list);
 	}
+	
+	public static Connection jsconnect(String url) throws IOException {
+		
+		Connection con = Jsoup.connect(url.trim());
+		con.timeout(50000);
+		return con;
+	}
 
 	public static boolean isWhereUsedSite(String srcUrl) {
-		if (srcUrl.indexOf("ah-wused") == -1)
+		String whereuserdURLs = Platform.getResourceBundle(JadclipsePlugin.getDefault().getBundle()).getString(JadclipsePlugin.WUSED_URLS);
+		if (whereuserdURLs.indexOf(srcUrl) == -1)
 			return false;
 		else
 			return true;

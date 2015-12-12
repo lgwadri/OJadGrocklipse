@@ -25,18 +25,45 @@ public class StringChoiceFieldEditor extends FieldEditor
     private List fLabels = new ArrayList(5);
     private String fOldKey;
     private boolean fIsValid;
+    
+    public StringChoiceFieldEditor(String name, String label, String[] entryNamesAndValues, Composite parent)
+    {
+        super(name, label, parent);
+        initList();
+   		addItems(entryNamesAndValues);
+    }
+    
+    public StringChoiceFieldEditor(String name, String label, String entryNamesAndValues[][], Composite parent)
+    {
+        super(name, label, parent);
+        initList();
+    	addItems(entryNamesAndValues);
+    }
+   
 
     public StringChoiceFieldEditor(String name, String label, Composite parent)
     {
         super(name, label, parent);
         initList();
     }
+    
+    public void addItems(String[] entryNamesAndValues)
+    {
+    	for (int i = 0; i < entryNamesAndValues.length; i++)
+    		addItem(entryNamesAndValues[i], entryNamesAndValues[i]);
+    }
+    
+    public void addItems(String entryNamesAndValues[][])
+    {
+    	 for (int i = 0; i < entryNamesAndValues.length; i++)
+     		addItem(entryNamesAndValues[i][0], entryNamesAndValues[i][1]);
+    }
    
     public void addItem(String key, String label)
     {
         fKeys.add(key);
         fLabels.add(label);
-        fCombo.add(key);
+        fCombo.add(label);
     }
     
     protected void adjustForNumColumns(int numColumns)
@@ -71,7 +98,7 @@ public class StringChoiceFieldEditor extends FieldEditor
     protected void doLoad()
     {
         String value = getPreferenceStore().getString(getPreferenceName());
-        int index = fCombo.indexOf(value);
+        int index = fKeys.indexOf(value);
         if (index >= 0)
             fCombo.select(index);
     }
@@ -79,7 +106,7 @@ public class StringChoiceFieldEditor extends FieldEditor
     protected void doLoadDefault()
     {
         String value = getPreferenceStore().getString(getPreferenceName());
-        int index = fCombo.indexOf(value);
+        int index = fKeys.indexOf(value);
         if (index >= 0)
             fCombo.select(index);
     }
@@ -91,7 +118,7 @@ public class StringChoiceFieldEditor extends FieldEditor
         {
             value = fCombo.getItem(fCombo.getSelectionIndex());
         }
-        getPreferenceStore().setValue(getPreferenceName(), value);
+        getPreferenceStore().setValue(getPreferenceName(), getSelectedKey());
     }
     
     public int getNumberOfControls()

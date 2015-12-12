@@ -14,6 +14,7 @@ import java.util.List;
 
 import net.sf.jadclipse.opengrock.Utils;
 
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -21,7 +22,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 /**
- * @author kamal
+ * @author kamal kaessajidi@outlook.fr
  * 
  */
 public class PTCDecompiler implements IDecompiler {
@@ -62,7 +63,7 @@ public class PTCDecompiler implements IDecompiler {
 				srcUrl = srcUrl + "/" + gproject + "/viewSource.jsp?class=" + packege + "." + className;
 				data += "&" + URLEncoder.encode("ln", "UTF-8") + "=" + URLEncoder.encode("false", "UTF-8");
 
-				System.out.println("Open: " + srcUrl);
+				JadclipsePlugin.getDefault().getLog().log(new Status(Status.INFO, JadclipsePlugin.PLUGIN_ID, 0, "Open: " + srcUrl, null));
 
 				URL url = new URL(srcUrl);
 				URLConnection conn = url.openConnection();
@@ -92,17 +93,15 @@ public class PTCDecompiler implements IDecompiler {
 				rd.close();
 			} else {
 				String line;
-				String search_pattern = srcUrl + "search?q=&project=" + gproject + "&defs=&refs=&path=" + path + "&hist=";
-
-				/*
-				 * get the file path source
-				 */
-				Document doc = Jsoup.connect(search_pattern).get();
+				String search_pattern = srcUrl + "/search?q=&project=" + gproject + "&defs=&refs=&path=" + path + "&hist=";
+				// get the file path source
+				Document doc = Utils.jsconnect(search_pattern).get();
 				Elements results = doc.getElementById("results").getAllElements();
 				for (Element el : results) {
 					if (el.tagName().equals("a") && el.parent().className().equals("f")) {
 						String class_url = srcUrl + el.attr("href").replaceAll("xref", "raw");
-						System.out.println("Open: " + class_url);
+						//log the info
+						JadclipsePlugin.getDefault().getLog().log(new Status(Status.INFO, JadclipsePlugin.PLUGIN_ID, 0, "Open: " + class_url, null));
 						URL url = new URL(class_url);
 						URLConnection conn = url.openConnection();
 						conn.setDoOutput(true);
@@ -123,7 +122,7 @@ public class PTCDecompiler implements IDecompiler {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			JadclipsePlugin.logError(e, e.getLocalizedMessage());
 		} finally {
 			time = System.currentTimeMillis() - start;
 		}
@@ -189,7 +188,7 @@ public class PTCDecompiler implements IDecompiler {
 		String grock_url = "http://ah-opengrok.ptcnet.ptc.com/";
 		String search_pattern = grock_url + "search?q=&project=" + project + "&defs=&refs=&path=" + file + ".java&hist=";
 
-		Document doc = Jsoup.connect(search_pattern).get();
+		Document doc = Utils.jsconnect(search_pattern).get();
 		Elements results = doc.getElementById("results").getAllElements();
 
 		// System.out.println(results.toString());
@@ -210,7 +209,7 @@ public class PTCDecompiler implements IDecompiler {
 				}
 				rd.close();
 
-				// Document doc_class = Jsoup.connect(class_url).get();
+				// Document doc_class = Utils.jsconnect(class_url).get();
 				// System.out.println(doc_class.text());
 			}
 		}

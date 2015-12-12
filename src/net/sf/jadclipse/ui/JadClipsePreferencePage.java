@@ -4,9 +4,11 @@ import net.sf.jadclipse.JadDecompiler;
 import net.sf.jadclipse.JadclipsePlugin;
 import net.sf.jadclipse.opengrock.Utils;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.jface.preference.ListEditor;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -23,7 +25,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 /**
  * Main preference page
  * 
- * @author V.Grishchenko
+ * @author V.Grishchenko, Kamal Essajidi kaessajidi@outlook.fr
  */
 public class JadClipsePreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
@@ -45,6 +47,7 @@ public class JadClipsePreferencePage extends FieldEditorPreferencePage implement
 	 * @see FieldEditorPreferencePage#createFieldEditors()
 	 */
 	protected void createFieldEditors() {
+
 		// command line
 		StringFieldEditor cmd = new StringFieldEditor(JadclipsePlugin.CMD, "Path to decompiler:", getFieldEditorParent());
 		cmd.setEmptyStringAllowed(false);
@@ -54,35 +57,27 @@ public class JadClipsePreferencePage extends FieldEditorPreferencePage implement
 		StringFieldEditor tempd = new StringFieldEditor(JadclipsePlugin.TEMP_DIR, "Directory for temporary files:", getFieldEditorParent());
 		tempd.setEmptyStringAllowed(false);
 		addField(tempd);
-				
-			
-		
-		StringChoiceFieldEditor ptcsrcUrl = new StringChoiceFieldEditor(JadclipsePlugin.PTC_URL, "Grock Url ", getFieldEditorParent());
-		ptcsrcUrl.addItem("http://ah-opengrok.ptcnet.ptc.com/", "http://ah-opengrok.ptcnet.ptc.com/");
-		ptcsrcUrl.addItem("http://bla-grok-01/", "http://bla-grok-01/");
-		ptcsrcUrl.addItem("http://ah-wused.ptcnet.ptc.com", "http://ah-wused.ptcnet.ptc.com");
-		addField(ptcsrcUrl);
-		ptcsrcUrl.addSelectionListener(new SelectionAdapter()
-        {
-            public void widgetSelected(SelectionEvent e)
-            {
-            	choice.removeItems();
-            	Combo obj = ((Combo)e.getSource());
-            	String[][] fKeys = Utils.getGrockProjects(obj.getItem(obj.getSelectionIndex()));
-            	for (int i = 0; i < fKeys.length; i++)
-            		choice.addItem(fKeys[i][1], fKeys[i][0]);
-            }
 
-        });
 		
+		String[] grogrockURLs = Platform.getResourceBundle(JadclipsePlugin.getDefault().getBundle()).getString(JadclipsePlugin.GROCK_URLS).split(",");
+		String[] whereuserdURLs = Platform.getResourceBundle(JadclipsePlugin.getDefault().getBundle()).getString(JadclipsePlugin.WUSED_URLS).split(",");
 		
-		String[][] projects = Utils.getGrockProjects(null);
-		choice = new StringChoiceFieldEditor(JadclipsePlugin.GROCK_PROJECT, "Grock Projects", getFieldEditorParent());
-    	for (int i = 0; i < projects.length; i++)
-    		choice.addItem(projects[i][1], projects[i][0]);
+		StringChoiceFieldEditor ptcsrcUrl = new StringChoiceFieldEditor(JadclipsePlugin.PTC_URL, "Sources Url ", grogrockURLs, getFieldEditorParent());
+		ptcsrcUrl.addItems(whereuserdURLs);
+		addField(ptcsrcUrl);
+		ptcsrcUrl.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				choice.removeItems();
+				Combo obj = ((Combo) e.getSource());
+				String[][] fKeys = Utils.getGrockProjects(obj.getItem(obj.getSelectionIndex()));
+				choice.addItems(fKeys);
+			}
+
+		});
+
+		choice = new StringChoiceFieldEditor(JadclipsePlugin.GROCK_PROJECT, "Sources Project", Utils.getGrockProjects(null), getFieldEditorParent());
 		addField(choice);
-		
-		
+
 		BooleanFieldEditor ignoreptcsrc = new BooleanFieldEditor(JadclipsePlugin.IGNORE_PTCSRC, "Ignore PTC web sources if existing", getFieldEditorParent());
 		addField(ignoreptcsrc);
 		BooleanFieldEditor reusebuf = new BooleanFieldEditor(JadclipsePlugin.REUSE_BUFFER, "Reuse code buffer", getFieldEditorParent());
