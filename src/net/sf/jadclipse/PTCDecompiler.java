@@ -63,8 +63,6 @@ public class PTCDecompiler implements IDecompiler {
 				srcUrl = srcUrl + "/" + gproject + "/viewSource.jsp?class=" + packege + "." + className;
 				data += "&" + URLEncoder.encode("ln", "UTF-8") + "=" + URLEncoder.encode("false", "UTF-8");
 
-				JadclipsePlugin.getDefault().getLog().log(new Status(Status.INFO, JadclipsePlugin.PLUGIN_ID, 0, "Open: " + srcUrl, null));
-
 				URL url = new URL(srcUrl);
 				URLConnection conn = url.openConnection();
 				conn.setDoOutput(true);
@@ -91,6 +89,9 @@ public class PTCDecompiler implements IDecompiler {
 
 				wr.close();
 				rd.close();
+				if(!source.equals(""))
+					JadclipsePlugin.getDefault().getLog().log(new Status(Status.INFO, JadclipsePlugin.PLUGIN_ID, 0, "Open: " + srcUrl, null));
+
 			} else {
 				String line;
 				String search_pattern = srcUrl + "/search?q=&project=" + gproject + "&defs=&refs=&path=" + path + "&hist=";
@@ -101,7 +102,6 @@ public class PTCDecompiler implements IDecompiler {
 					if (el.tagName().equals("a") && el.parent().className().equals("f")) {
 						String class_url = srcUrl + el.attr("href").replaceAll("xref", "raw");
 						//log the info
-						JadclipsePlugin.getDefault().getLog().log(new Status(Status.INFO, JadclipsePlugin.PLUGIN_ID, 0, "Open: " + class_url, null));
 						URL url = new URL(class_url);
 						URLConnection conn = url.openConnection();
 						conn.setDoOutput(true);
@@ -113,6 +113,8 @@ public class PTCDecompiler implements IDecompiler {
 						} finally {
 							rd.close();
 						}
+						JadclipsePlugin.getDefault().getLog().log(new Status(Status.INFO, JadclipsePlugin.PLUGIN_ID, 0, "Open: " + class_url, null));
+						
 						/*
 						 * Stop at first
 						 */
